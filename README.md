@@ -3,7 +3,7 @@
 ## Table of Contents
 
 * [Instructions](#instructions)
-* [Purpose] (#purpose)
+* [Purpose](#purpose)
 * [Requirements](#requirements)
 * [Contributing](#contributing)
 
