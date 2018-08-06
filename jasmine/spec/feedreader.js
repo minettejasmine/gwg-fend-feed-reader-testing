@@ -71,10 +71,10 @@ $(function() {
         it('toggles on and off', function() {
             const body = document.querySelector('body'); // Querying body element and storing in a variable
             const menu = document.querySelector('.menu-icon-link'); // Query menu icon element and store in this variable
-            
+
             menu.click(); // Use click method to simulate the clicking action on the menu icon to make the menu appear
             expect(body.classList.contains('menu-hidden')).toBe(false);
-            
+
             menu.click(); // Use click method to simulate the clicking action on the menu icon to make the menu hide
             expect(body.classList.contains('menu-hidden')).toBe(true);
         });
@@ -88,36 +88,44 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-        beforeEach(function(done) { // Everything in this function will be run before the 'expect' statement; Let Jasmine test know that beforeEach function is complete and can proceed with the ttest
+        beforeEach(function(done) { // Everything in this function will be run before the 'expect' statement; Let Jasmine test know that beforeEach function is complete and can proceed with the test
             loadFeed(0, done); // Call the loadFeed function for the first index, having the id of 0.
         });
 
-        it('completes its work', function() {
-            const feed = document.querySelector('.feed'); // Query feed container element and store in this variable
-            expect(feed.children.length > 0).toBe(true); // Expecting the feed container's children property to have a length greater than 0 for true
+        it('populates entry elements in feed container', function() {
+            const feed = document.querySelector('.feed'); // Query feed container
+            const entry = document.querySelector('.entry'); // Query entries in feed container
+            expect($('.feed .entry').length).toBeTruthy(); // Expecting at least one entry to be displayed
+
+            //const feed = document.querySelector('.feed'); // Query feed container element and store in this variable
+            //expect(feed.children.length > 0).toBe(true); // Expecting the feed container's children property to have a length greater than 0 for true
         });
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
     describe('New Feed Selection', function() {
-        const feed = document.querySelector('.feed'); // Query feed container element and store in this variable; To be used by multiple tests, so declared in outer function scope
-        const firstFeed = []; // Store first feed's content in this new empty array variable
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        beforeEach(function(done) { // Everything in this function will be run before the 'expect' statement; Let Jasmine test know that beforeEach function is complete and can proceed with the ttest
-            loadFeed(0); // Call the loadFeed function, then...
-            Array.from(feed.children).forEach(function(entry) { // Convert the feed children elements into array list and loop over each child element in the array by pushing the text to the firstFeed array
-                firstFeed.push(entry.innerText);
-            });
-            loadFeed(1, done); // Load a second feed in order to test that the content has changed
-        });
+        var prevURL; // variable to hold prevURL
+        var newURL; // variable to hold newURL
 
-        it('content actually changes', function() { // Convert the feed children elements into an array and loop over each item in the array
-            Array.from(feed.children).forEach(function(entry,index) {
-                expect(entry.innerText === firstFeed[index]).toBe(false);
+        beforeEach(function(done) { // Everything in this function will be run before the 'expect' statement; Let Jasmine test know that beforeEach function is complete and can proceed with the test
+            const feed = document.querySelector('.feed');
+            loadFeed(0, function() {
+                prevURL = document.querySelector('.entry-link');
+                // feed 0 done loading
+                loadFeed(1, function(done) {
+                newURL = document.querySelector('.entry-link');
+                   // feed 1 done loading
+                   // all variables initialized, can begin tests
+                });
             });
+        });
+        it('content actually changes', function() {
+            // test that content has changed
+            expect(prevURL === newURL).toBe(false);
         });
     });
 }());
