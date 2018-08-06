@@ -112,14 +112,14 @@ $(function() {
         var newURL; // variable to hold newURL
 
         beforeEach(function(done) { // Everything in this function will be run before the 'expect' statement; Let Jasmine test know that beforeEach function is complete and can proceed with the test
-            const feed = document.querySelector('.feed');
             loadFeed(0, function() {
                 prevURL = document.querySelector('.entry-link');
                 // feed 0 done loading
-                loadFeed(1, function(done) {
-                newURL = document.querySelector('.entry-link');
+                loadFeed(1, function() {
+                    newURL = document.querySelector('.entry-link');
                    // feed 1 done loading
                    // all variables initialized, can begin tests
+                    done();
                 });
             });
         });
